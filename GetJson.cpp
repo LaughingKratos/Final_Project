@@ -25,8 +25,11 @@ namespace
 
 int main()
 {
+    string dificulltyLevel = "";
+    string testSubject = "";
+
     // CURL interaction section
-    const std::string url("https://opentdb.com/api.php?amount=10");
+    const std::string url("https://opentdb.com/api.php?amount=5");
 
     CURL* curl = curl_easy_init();
 
