@@ -23,6 +23,7 @@ namespace
 }
 
 vector<string> Subjects;
+vector<int> SubjctsId;
 
 string jsonData(string url) {
     CURL* curl = curl_easy_init();
@@ -91,6 +92,7 @@ void GetSubjects() {
 
     for (int i = 0; i < subs["trivia_categories"].size(); i++) {
         Subjects.push_back(subs["trivia_categories"][i]["name"]);
+        SubjctsId.push_back(subs["trivia_categories"][i]["id"]);
     }
 }
 
