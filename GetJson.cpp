@@ -40,7 +40,10 @@ string jsonData(string url) {
     curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &httpCode);
     curl_easy_cleanup(curl);
 
-    return *httpData.get();
+    if (httpCode == 200)
+        return *httpData.get();
+    else
+        return "";
 }
 
 
@@ -53,14 +56,21 @@ int main()
 
     const string url("https://opentdb.com/api.php?amount=5&token=" + uniqueToken);
 
-    json js = json::parse(jsonData(url));
+    string thisRoundQuestions = jsonData(url);
+    
+    if (thisRoundQuestions != "") {
+        json js = json::parse(thisRoundQuestions);
 
-    if (js["response_code"] == 0) {
-        json res = js["results"];
+        if (js["response_code"] == 0) {
+            json res = js["results"];
 
-        for (int i = 0; i < 5; i++) {
-            cout << res[i]<<'\n';
+            for (int i = 0; i < 5; i++) {
+                cout << res[i] << '\n';
+            }
         }
+    }
+    else {
+        cout << "There was an error!";
     }
 
     return 0;
