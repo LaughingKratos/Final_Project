@@ -1,7 +1,6 @@
-#include <cstdint>
 #include <iostream>
-#include <memory>
 #include <string>
+#include <vector>
 
 #include <curl/curl.h>
 #include <nlohmann/json.hpp>
@@ -50,9 +49,18 @@ int main()
     // Results are already stored in httpData, an ending to curl interaction
 
 
+    //modifing json into devs-defining variables
     if (httpCode == 200)
     {
-        json js(*httpData.get());
+        json js = json::parse(*httpData.get());
+
+        if (js["response_code"] == 0) {
+            json res = js["results"];
+
+            for (int i = 0; i < 5; i++) {
+                cout << res[i]<<'\n';
+            }
+        }
     }
     else
     {
