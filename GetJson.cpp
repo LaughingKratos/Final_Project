@@ -22,6 +22,8 @@ namespace
     }
 }
 
+vector<string> Subjects;
+
 string jsonData(string url) {
     CURL* curl = curl_easy_init();
 
@@ -46,32 +48,56 @@ string jsonData(string url) {
         return "";
 }
 
-
-
-int main()
-{
+void PvPRound() {
     string dificulltyLevel = "";
     string testSubject = "";
     string uniqueToken = "";
 
-    const string url("https://opentdb.com/api.php?amount=5&token=" + uniqueToken);
+    const string url("https://opentdb.com/api.php?amount=5");
 
-    string thisRoundQuestions = jsonData(url);
-    
-    if (thisRoundQuestions != "") {
-        json js = json::parse(thisRoundQuestions);
+    vector<string> questions;
+    vector<vector<string>> wrongAnswers;
+    vector<string> trueAnswer;
+
+    string thisRoundItems = jsonData(url);
+
+    if (thisRoundItems != "") {
+        json js = json::parse(thisRoundItems);
 
         if (js["response_code"] == 0) {
             json res = js["results"];
 
             for (int i = 0; i < 5; i++) {
-                cout << res[i] << '\n';
+                questions.push_back(res[i]["question"]);
+                trueAnswer.push_back(res[i]["correct_answer"]);
+                
+                vector<string> wa;
+                json wajson = res[i]["incorrect_answers"];
+                for (short j = 0; j < 3; j++) {
+                    wa.push_back(wajson[j]);
+                }
+                wrongAnswers.push_back(wa);
             }
         }
     }
     else {
         cout << "There was an error!";
     }
+}
+
+void GetSubjects() {
+    const string url("https://opentdb.com/api_category.php");
+    json subs = json::parse(jsonData(url));
+
+    for (int i = 0; i < subs["trivia_categories"].size(); i++) {
+        Subjects.push_back(subs["trivia_categories"][i]["name"]);
+    }
+}
+
+int main()
+{
+    GetSubjects();
+    PvPRound();
 
     return 0;
 }
