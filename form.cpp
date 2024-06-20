@@ -133,10 +133,6 @@ resetToken:
         }
     }
     else {
-        QMessageBox* msg = new QMessageBox;
-        msg->setWindowTitle("Error!");
-        msg->setText("You might be disconnected.");
-        msg->exec();
         goto resetToken;
     }
 }
