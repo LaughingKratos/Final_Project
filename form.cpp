@@ -5,6 +5,7 @@
 #include "QCloseEvent"
 #include <curl/curl.h>
 #include <nlohmann/json.hpp>
+#include <ctime>
 
 QString category;
 QString difficaulty;
@@ -63,7 +64,7 @@ std::string jsonData(std::string url) {
 void PvPRound(std::string difficultyLevel = "", std::string subject = "Any Category") {
     std::string uniqueToken = "";
 
-    std::string url("https://opentdb.com/api.php?amount=5");
+    std::string url("https://opentdb.com/api.php?amount=5&type=multiple");
     if (subject != "Any Category") {
         int subjectId;
         for (int i = 0; i < Subjects.size(); i++) {
@@ -85,13 +86,13 @@ void PvPRound(std::string difficultyLevel = "", std::string subject = "Any Categ
             json res = js["results"];
 
             for (int i = 0; i < 5; i++) {
-                questionsVec.push_back(res[i]["question"]);
-                trueAnswer.push_back(res[i]["correct_answer"]);
+                questions.push_back(QString::fromStdString(res[i]["question"]));
+                trueAnswer.push_back(QString::fromStdString(res[i]["correct_answer"]));
 
-                std::vector<std::string> wa;
+                std::vector<QString> wa;
                 json wajson = res[i]["incorrect_answers"];
                 for (short j = 0; j < 3; j++) {
-                    wa.push_back(wajson[j]);
+                    wa.push_back(QString::fromStdString(wajson[j]));
                 }
                 wrongAnswers.push_back(wa);
             }
@@ -118,6 +119,7 @@ Form::Form(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle("Mode PVP");
+    srand((unsigned)time(0));
     player1_score = 0;
     player2_score = 0;
     question_number = 0;
@@ -173,11 +175,37 @@ void Form::on_pushButton_clicked()
 
     PvPRound(difficaulty.toStdString(), category.toStdString());
 
-    ui->label_3->setText(questions[0][0]);
-    ui->radioButton_5->setText(questions[0][1]);
-    ui->radioButton_6->setText(questions[0][2]);
-    ui->radioButton_7->setText(questions[0][3]);
-    ui->radioButton_8->setText(questions[0][4]);
+    ui->label_3->setText(questions[0]);
+    int randomCorrect = rand() % (4);
+    switch (randomCorrect)
+    {
+    case 0:
+        ui->radioButton_5->setText(trueAnswer[0]);
+        ui->radioButton_6->setText(wrongAnswers[0][0]);
+        ui->radioButton_7->setText(wrongAnswers[0][1]);
+        ui->radioButton_8->setText(wrongAnswers[0][2]);
+        break;
+    case 1:
+        ui->radioButton_6->setText(trueAnswer[0]);
+        ui->radioButton_5->setText(wrongAnswers[0][0]);
+        ui->radioButton_7->setText(wrongAnswers[0][1]);
+        ui->radioButton_8->setText(wrongAnswers[0][2]);
+        break;
+    case 2:
+        ui->radioButton_7->setText(trueAnswer[0]);
+        ui->radioButton_6->setText(wrongAnswers[0][0]);
+        ui->radioButton_5->setText(wrongAnswers[0][1]);
+        ui->radioButton_8->setText(wrongAnswers[0][2]);
+        break;
+    case 3:
+        ui->radioButton_8->setText(trueAnswer[0]);
+        ui->radioButton_6->setText(wrongAnswers[0][0]);
+        ui->radioButton_7->setText(wrongAnswers[0][1]);
+        ui->radioButton_5->setText(wrongAnswers[0][2]);
+        break;
+    default:
+        break;
+    }
 
 }
 
@@ -199,25 +227,6 @@ void Form::on_pushButton_2_clicked()
     }
     */
 
-    if(question_number>=0 && question_number<=4){
-
-        if(questions[question_number][5]==questions[question_number][1] && ui->radioButton_5->isChecked()==true && turn%2==0){player1_score+=1;}
-        else if(questions[question_number][5]==questions[question_number][1] && ui->radioButton_5->isChecked()==true && turn%2==1){player2_score+=1;}
-        else if(questions[question_number][5]==questions[question_number][2] && ui->radioButton_6->isChecked()==true && turn%2==0){player1_score+=1;}
-        else if(questions[question_number][5]==questions[question_number][2] && ui->radioButton_6->isChecked()==true && turn%2==1){player2_score+=1;}
-        else if(questions[question_number][5]==questions[question_number][3] && ui->radioButton_7->isChecked()==true && turn%2==0){player1_score+=1;}
-        else if(questions[question_number][5]==questions[question_number][3] && ui->radioButton_7->isChecked()==true && turn%2==1){player2_score+=1;}
-        else if(questions[question_number][5]==questions[question_number][4] && ui->radioButton_8->isChecked()==true && turn%2==0){player1_score+=1;}
-        else if(questions[question_number][5]==questions[question_number][4] && ui->radioButton_8->isChecked()==true && turn%2==1){player2_score+=1;}
-    }
-
-    if(question_number>=0 && question_number<=3){
-        ui->label_3->setText(questions[question_number+1][0]);
-        ui->radioButton_5->setText(questions[question_number+1][1]);
-        ui->radioButton_6->setText(questions[question_number+1][2]);
-        ui->radioButton_7->setText(questions[question_number+1][3]);
-        ui->radioButton_8->setText(questions[question_number+1][4]);
-    }
 
     if(question_number==3){
         ui->pushButton_2->setText("Finish!");
