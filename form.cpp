@@ -411,12 +411,11 @@ void Form::on_pushButton_2_clicked()
             break;
         }
 
-
+        if (question_number == 4) {
+            ui->pushButton_2->setText("Finish!");
+        }
     }
 
-    if (question_number == 4) {
-        ui->pushButton_2->setText("Finish!");
-    }
     else if (question_number == 5 && turn % 2 == 0) {
 
         ui->label_3->setText("Question");
@@ -480,7 +479,25 @@ void Form::on_pushButton_2_clicked()
 
         turn += 1;
     }
-    else if (question_number == 5 && turn % 2 == 1 && turn == 7 && player1_tScore == player2_tScore) {
+    else {
+        if (player1_score > player2_score) {
+            player1_tScore++;
+            ui->label_10->setText(QString::number(player1_tScore));
+        }
+        else if (player1_score < player2_score) {
+            player2_tScore++;
+            ui->label_11->setText(QString::number(player2_tScore));
+        }
+        else {
+            player1_tScore++;
+            ui->label_10->setText(QString::number(player1_tScore));
+            player2_tScore++;
+            ui->label_11->setText(QString::number(player2_tScore));
+        }
+        player1_score = 0;
+        player2_score = 0;
+
+        if (question_number == 5 && turn % 2 == 1 && turn == 7 && player1_tScore == player2_tScore) {
         ui->label_3->setText("Question");
         ui->radioButton_5->setText("Option 1");
         ui->radioButton_6->setText("Option 2");
@@ -513,9 +530,8 @@ void Form::on_pushButton_2_clicked()
         turn -= 1;
         golden_round_number += 1;
     }
-    else if (question_number == 5 && turn % 2 == 1 && turn == 7 && player1_tScore != player2_tScore) {
-        ui->label_10->setText(QString::number(player1_tScore));
-        ui->label_11->setText(QString::number(player2_tScore));
+        else if (question_number == 5 && turn % 2 == 1 && turn == 7 && player1_tScore != player2_tScore) {
+
         QMessageBox* msg = new QMessageBox;
         ui->frame_2->setEnabled(false);
         msg->setWindowTitle("Result");
@@ -538,6 +554,8 @@ void Form::on_pushButton_2_clicked()
         golden_round_number = 0;
         close();
     }
+    }
+    
     ui->radioButton_9->setChecked(true);
     //ui->radioButton_5->setVisible(false);
     //ui->radioButton_9->set
