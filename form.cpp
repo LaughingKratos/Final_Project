@@ -17,6 +17,8 @@ int question_number = 0;
 int currentQuestionCorrectAnswerIndex = 0;
 int turn=0;
 int golden_round_number = 0;
+std::string uniqueToken = "";
+void GetToken();
 
 using json = nlohmann::json;
 
@@ -68,9 +70,12 @@ void PvPRound(std::string difficultyLevel = "Any Difficulty", std::string subjec
     questions.clear();
     trueAnswer.clear();
     wrongAnswers.clear();
-    std::string uniqueToken = "";
+
+resetToken:
 
     std::string url("https://opentdb.com/api.php?amount=5&type=multiple");
+    if (uniqueToken != "") 
+        url += "&token=" + uniqueToken;
     if (subject != "Any Category") {
         int subjectId;
         for (int i = 0; i < Subjects.size(); i++) {
@@ -116,6 +121,10 @@ void PvPRound(std::string difficultyLevel = "Any Difficulty", std::string subjec
             msg->setText("Not enough questions on the server.");
             msg->exec();
         }
+        else if (js["response_code"] == 3 || js["response_code"] == 4) {
+            GetToken();
+            goto resetToken;
+        }
         else {
             QMessageBox* msg = new QMessageBox;
             msg->setWindowTitle("Error!");
@@ -143,6 +152,12 @@ void GetSubjects() {
         Subjects.push_back(subs["trivia_categories"][i]["name"]);
         SubjctsId.push_back(subs["trivia_categories"][i]["id"]);
     }
+}
+
+void GetToken() {
+    json tokenJ = json::parse(jsonData("https://opentdb.com/api_token.php?command=request"));
+    if (tokenJ["response_code"] == 0)
+        uniqueToken = tokenJ["token"];
 }
 
 Form::Form(QWidget *parent) :
