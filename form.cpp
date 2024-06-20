@@ -8,7 +8,6 @@
 
 QString category;
 QString difficaulty;
-QString questions [5][6];
 int player1_score = 0;
 int player2_score = 0;
 int question_number = 0;
@@ -33,6 +32,9 @@ namespace
 
 std::vector<std::string> Subjects;
 std::vector<int> SubjctsId;
+std::vector<QString> questions;
+std::vector<std::vector<QString>> wrongAnswers;
+std::vector<QString> trueAnswer;
 
 std::string jsonData(std::string url) {
     CURL* curl = curl_easy_init();
@@ -58,18 +60,21 @@ std::string jsonData(std::string url) {
         return "";
 }
 
-void PvPRound(std::string difficultyLevel = "", int subjectId = -1) {
+void PvPRound(std::string difficultyLevel = "", std::string subject = "Any Category") {
     std::string uniqueToken = "";
 
     std::string url("https://opentdb.com/api.php?amount=5");
-    if (subjectId != -1)
+    if (subject != "Any Category") {
+        int subjectId;
+        for (int i = 0; i < Subjects.size(); i++) {
+            if (Subjects[i] == subject) {
+                subjectId = SubjctsId[i];
+            }
+        }
         url += "&category=" + subjectId;
+    } 
     if (difficultyLevel != "")
         url += "&difficulty=" + difficultyLevel;
-
-    std::vector<std::string> questions;
-    std::vector<std::vector<std::string>> wrongAnswers;
-    std::vector<std::string> trueAnswer;
 
     std::string thisRoundItems = jsonData(url);
 
@@ -80,7 +85,7 @@ void PvPRound(std::string difficultyLevel = "", int subjectId = -1) {
             json res = js["results"];
 
             for (int i = 0; i < 5; i++) {
-                questions.push_back(res[i]["question"]);
+                questionsVec.push_back(res[i]["question"]);
                 trueAnswer.push_back(res[i]["correct_answer"]);
 
                 std::vector<std::string> wa;
@@ -166,42 +171,7 @@ void Form::on_pushButton_clicked()
     //ui->frame_2->setHidden(false);
     ui->pushButton_2->setEnabled(true);
 
-    //Api Get.........................................................................
-    questions[0][0]="Salam. Haletun chetore?";
-    questions[0][1]="morgh";
-    questions[0][2]="shotormorgh";
-    questions[0][3]="gooshte morg";
-    questions[0][4]="pooste morgh";
-    questions[0][5]="morgh";
-
-    questions[1][0]="2Salam. Haletun chetore?";
-    questions[1][1]="2morgh";
-    questions[1][2]="2shotormorgh";
-    questions[1][3]="2gooshte morg";
-    questions[1][4]="2pooste morgh";
-    questions[1][5]="2morgh";
-
-    questions[2][0]="3Salam. Haletun chetore?";
-    questions[2][1]="3morgh";
-    questions[2][2]="3shotormorgh";
-    questions[2][3]="3gooshte morg";
-    questions[2][4]="3pooste morgh";
-    questions[2][5]="3morgh";
-
-    questions[3][0]="4Salam. Haletun chetore?";
-    questions[3][1]="4morgh";
-    questions[3][2]="4shotormorgh";
-    questions[3][3]="4gooshte morg";
-    questions[3][4]="4pooste morgh";
-    questions[3][5]="4morgh";
-
-    questions[4][0]="5Salam. Haletun chetore?";
-    questions[4][1]="5morgh";
-    questions[4][2]="5shotormorgh";
-    questions[4][3]="5gooshte morg";
-    questions[4][4]="5pooste morgh";
-    questions[4][5]="5morgh";
-    //End of api get...............................................................
+    PvPRound(difficaulty.toStdString(), category.toStdString());
 
     ui->label_3->setText(questions[0][0]);
     ui->radioButton_5->setText(questions[0][1]);
