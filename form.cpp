@@ -11,6 +11,8 @@ QString category;
 QString difficaulty;
 int player1_score = 0;
 int player2_score = 0;
+int player1_tScore = 0;
+int player2_tScore = 0;
 int question_number = 0;
 int currentQuestionCorrectAnswerIndex = 0;
 int turn=0;
@@ -63,6 +65,9 @@ std::string jsonData(std::string url) {
 }
 
 void PvPRound(std::string difficultyLevel = "Any Difficulty", std::string subject = "Any Category") {
+    questions.clear();
+    trueAnswer.clear();
+    wrongAnswers.clear();
     std::string uniqueToken = "";
 
     std::string url("https://opentdb.com/api.php?amount=5&type=multiple");
@@ -71,9 +76,10 @@ void PvPRound(std::string difficultyLevel = "Any Difficulty", std::string subjec
         for (int i = 0; i < Subjects.size(); i++) {
             if (Subjects[i] == subject) {
                 subjectId = SubjctsId[i];
+                break;
             }
         }
-        url += "&category=" + subjectId;
+        url += "&category=" + std::to_string(subjectId);
     } 
     if (difficultyLevel != "Any Difficulty")
         url += "&difficulty=" + difficultyLevel;
@@ -87,9 +93,10 @@ void PvPRound(std::string difficultyLevel = "Any Difficulty", std::string subjec
             json res = js["results"];
 
             for (int i = 0; i < 5; i++) {
-                json qus = res[i]["question"];
+                json qus = res[i];
                 json coans = res[i]["correct_answer"];
-                std::string temp1 = qus;
+                json qus2 = qus["question"];
+                std::string temp1 = qus2;
                 std::string temp2 = coans;
                 questions.push_back(QString::fromStdString(temp1));
                 trueAnswer.push_back(QString::fromStdString(temp2));
@@ -103,15 +110,34 @@ void PvPRound(std::string difficultyLevel = "Any Difficulty", std::string subjec
                 wrongAnswers.push_back(wa);
             }
         }
+        else if (js["response_code"] == 1) {
+            QMessageBox* msg = new QMessageBox;
+            msg->setWindowTitle("Error!");
+            msg->setText("Not enough questions on the server.");
+            msg->exec();
+        }
+        else {
+            QMessageBox* msg = new QMessageBox;
+            msg->setWindowTitle("Error!");
+            msg->setText("An unknown error prevented us from starting the game.");
+            msg->exec();
+        }
     }
     else {
-        
+        QMessageBox* msg = new QMessageBox;
+        msg->setWindowTitle("Error!");
+        msg->setText("You might be disconnected.");
+        msg->exec();
     }
 }
 
 void GetSubjects() {
     const std::string url("https://opentdb.com/api_category.php");
-    json subs = json::parse(jsonData(url));
+    std::string response = jsonData(url);
+    if (response == "") {
+        return;
+    }
+    json subs = json::parse(response);
 
     for (int i = 0; i < subs["trivia_categories"].size(); i++) {
         Subjects.push_back(subs["trivia_categories"][i]["name"]);
@@ -132,6 +158,9 @@ Form::Form(QWidget *parent) :
     turn=0;
 
     GetSubjects();
+    if (Subjects.size() == 0) {
+        close();
+    }
     for (int i = 0; i < Subjects.size(); i++) {
         QString thisItem = QString::fromStdString(Subjects[i]);
         ui->comboBox->addItem(thisItem);
@@ -145,6 +174,14 @@ Form::~Form()
 
 void Form::on_pushButton_clicked()
 {
+    if (Subjects.size() == 0) {
+        QMessageBox* msg = new QMessageBox;
+        msg->setWindowTitle("Error!");
+        msg->setText("You might be disconnected.");
+        msg->exec();
+        close();
+        return;
+    }
 
     category = ui->comboBox->currentText();
 
@@ -180,6 +217,8 @@ void Form::on_pushButton_clicked()
     ui->pushButton_2->setEnabled(true);
 
     PvPRound(difficaulty.toStdString(), category.toStdString());
+    if (questions.size() == 0)
+        return;
 
     ui->label_3->setText(questions[0]);
     int randomCorrect = rand() % (4);
@@ -280,33 +319,74 @@ void Form::on_pushButton_2_clicked()
     if (question_number >= 0 && question_number <= 4) {
         ui->label_3->setText(questions[question_number]);
         int randomCorrect = rand() % (4);
+        int randomFalse = rand() % (3);
         currentQuestionCorrectAnswerIndex = randomCorrect;
 
         switch (randomCorrect)
         {
         case 0:
             ui->radioButton_5->setText(trueAnswer[question_number]);
-            ui->radioButton_6->setText(wrongAnswers[question_number][0]);
-            ui->radioButton_7->setText(wrongAnswers[question_number][1]);
-            ui->radioButton_8->setText(wrongAnswers[question_number][2]);
+            ui->radioButton_6->setText(wrongAnswers[question_number][randomFalse]);
+            if (randomFalse == 0) {
+                ui->radioButton_7->setText(wrongAnswers[question_number][1]);
+                ui->radioButton_8->setText(wrongAnswers[question_number][2]);
+            }
+            else if (randomFalse == 1) {
+                ui->radioButton_7->setText(wrongAnswers[question_number][0]);
+                ui->radioButton_8->setText(wrongAnswers[question_number][2]);
+            }
+            else {
+                ui->radioButton_7->setText(wrongAnswers[question_number][0]);
+                ui->radioButton_8->setText(wrongAnswers[question_number][1]);
+            }
             break;
         case 1:
             ui->radioButton_6->setText(trueAnswer[question_number]);
-            ui->radioButton_5->setText(wrongAnswers[question_number][0]);
-            ui->radioButton_7->setText(wrongAnswers[question_number][1]);
-            ui->radioButton_8->setText(wrongAnswers[question_number][2]);
+            ui->radioButton_5->setText(wrongAnswers[question_number][randomFalse]);
+            if (randomFalse == 0) {
+                ui->radioButton_7->setText(wrongAnswers[question_number][1]);
+                ui->radioButton_8->setText(wrongAnswers[question_number][2]);
+            }
+            else if (randomFalse == 1) {
+                ui->radioButton_7->setText(wrongAnswers[question_number][0]);
+                ui->radioButton_8->setText(wrongAnswers[question_number][2]);
+            }
+            else {
+                ui->radioButton_7->setText(wrongAnswers[question_number][0]);
+                ui->radioButton_8->setText(wrongAnswers[question_number][1]);
+            }
             break;
         case 2:
             ui->radioButton_7->setText(trueAnswer[question_number]);
-            ui->radioButton_6->setText(wrongAnswers[question_number][0]);
-            ui->radioButton_5->setText(wrongAnswers[question_number][1]);
-            ui->radioButton_8->setText(wrongAnswers[question_number][2]);
+            ui->radioButton_6->setText(wrongAnswers[question_number][randomFalse]);
+            if (randomFalse == 0) {
+                ui->radioButton_5->setText(wrongAnswers[question_number][1]);
+                ui->radioButton_8->setText(wrongAnswers[question_number][2]);
+            }
+            else if (randomFalse == 1) {
+                ui->radioButton_8->setText(wrongAnswers[question_number][0]);
+                ui->radioButton_5->setText(wrongAnswers[question_number][2]);
+            }
+            else {
+                ui->radioButton_5->setText(wrongAnswers[question_number][0]);
+                ui->radioButton_8->setText(wrongAnswers[question_number][1]);
+            }
             break;
         case 3:
             ui->radioButton_8->setText(trueAnswer[question_number]);
-            ui->radioButton_6->setText(wrongAnswers[question_number][0]);
-            ui->radioButton_7->setText(wrongAnswers[question_number][1]);
-            ui->radioButton_5->setText(wrongAnswers[question_number][2]);
+            ui->radioButton_6->setText(wrongAnswers[question_number][randomFalse]);
+            if (randomFalse == 0) {
+                ui->radioButton_7->setText(wrongAnswers[question_number][1]);
+                ui->radioButton_5->setText(wrongAnswers[question_number][2]);
+            }
+            else if (randomFalse == 1) {
+                ui->radioButton_5->setText(wrongAnswers[question_number][0]);
+                ui->radioButton_7->setText(wrongAnswers[question_number][2]);
+            }
+            else {
+                ui->radioButton_7->setText(wrongAnswers[question_number][0]);
+                ui->radioButton_5->setText(wrongAnswers[question_number][1]);
+            }
             break;
         default:
             break;
@@ -339,7 +419,6 @@ void Form::on_pushButton_2_clicked()
         ui->radioButton_7->setCheckable(false);
         ui->radioButton_8->setCheckable(false);
 
-
         turn += 1;
     }
     else if (question_number == 5 && turn % 2 == 1 && turn < 7) {
@@ -363,9 +442,26 @@ void Form::on_pushButton_2_clicked()
         ui->radioButton_7->setCheckable(false);
         ui->radioButton_8->setCheckable(false);
 
+        if (player1_score > player2_score) {
+            player1_tScore++;
+            ui->label_10->setText(QString::number(player1_tScore));
+        }
+        else if (player1_score < player2_score) {
+            player2_tScore++;
+            ui->label_11->setText(QString::number(player2_tScore));
+        }
+        else {
+            player1_tScore++;
+            ui->label_10->setText(QString::number(player1_tScore));
+            player2_tScore++;
+            ui->label_11->setText(QString::number(player2_tScore));
+        }
+        player1_score = 0;
+        player2_score = 0;
+
         turn += 1;
     }
-    else if (question_number == 5 && turn % 2 == 1 && turn == 7 && player1_score == player2_score) {
+    else if (question_number == 5 && turn % 2 == 1 && turn == 7 && player1_tScore == player2_tScore) {
         ui->label_3->setText("Question");
         ui->radioButton_5->setText("Option 1");
         ui->radioButton_6->setText("Option 2");
@@ -387,11 +483,11 @@ void Form::on_pushButton_2_clicked()
         turn -= 1;
         golden_round_number += 1;
     }
-    else if (question_number == 5 && turn % 2 == 1 && turn == 7 && player1_score != player2_score) {
+    else if (question_number == 5 && turn % 2 == 1 && turn == 7 && player1_tScore != player2_tScore) {
         QMessageBox* msg = new QMessageBox;
         ui->frame_2->setEnabled(false);
         msg->setWindowTitle("Result");
-        if (player1_score > player2_score) {
+        if (player1_tScore > player2_tScore) {
             ui->pushButton_2->setText("Next");
             msg->setText("Player 1 win!");
             msg->exec();
@@ -403,8 +499,8 @@ void Form::on_pushButton_2_clicked()
         }
         question_number = 0;
         turn = 0;
-        player1_score = 0;
-        player2_score = 0;
+        player1_tScore = 0;
+        player2_tScore = 0;
         close();
     }
     ui->radioButton_9->setChecked(true);
