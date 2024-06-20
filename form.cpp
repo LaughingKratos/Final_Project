@@ -137,6 +137,7 @@ resetToken:
         msg->setWindowTitle("Error!");
         msg->setText("You might be disconnected.");
         msg->exec();
+        goto resetToken;
     }
 }
 
@@ -169,6 +170,9 @@ Form::Form(QWidget *parent) :
     srand((unsigned)time(0));
     player1_score = 0;
     player2_score = 0;
+    player1_tScore = 0;
+    player2_tScore = 0;
+    golden_round_number = 0;
     question_number = 0;
     turn=0;
 
@@ -495,10 +499,23 @@ void Form::on_pushButton_2_clicked()
         ui->radioButton_7->setCheckable(false);
         ui->radioButton_8->setCheckable(false);
 
+        if (golden_round_number == 0) {
+            ui->frame->setEnabled(true);
+            ui->frame_3->setEnabled(true);
+            ui->comboBox->setCurrentIndex(0);
+            ui->radioButton_1->setChecked(true);
+            category = "Any Category";
+            difficaulty = "Any Difficulty";
+            ui->frame->setEnabled(false);
+            ui->frame_3->setEnabled(false);
+        }
+
         turn -= 1;
         golden_round_number += 1;
     }
     else if (question_number == 5 && turn % 2 == 1 && turn == 7 && player1_tScore != player2_tScore) {
+        ui->label_10->setText(QString::number(player1_tScore));
+        ui->label_11->setText(QString::number(player2_tScore));
         QMessageBox* msg = new QMessageBox;
         ui->frame_2->setEnabled(false);
         msg->setWindowTitle("Result");
@@ -516,6 +533,9 @@ void Form::on_pushButton_2_clicked()
         turn = 0;
         player1_tScore = 0;
         player2_tScore = 0;
+        player1_score = 0;
+        player2_score = 0;
+        golden_round_number = 0;
         close();
     }
     ui->radioButton_9->setChecked(true);
