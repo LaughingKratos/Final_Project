@@ -49,12 +49,13 @@ string jsonData(string url) {
         return "";
 }
 
-void PvPRound() {
-    string dificulltyLevel = "";
-    string testSubject = "";
-    string uniqueToken = "";
+void PvPRound(string difficultyLevel = "", int subjectId = -1) {
 
-    const string url("https://opentdb.com/api.php?amount=5");
+    string url("https://opentdb.com/api.php?amount=5&type=multiple");
+    if (subjectId != -1)
+        url += "&category=" + subjectId;
+    if (difficultyLevel != "")
+        url += "&difficulty=" + difficultyLevel;
 
     vector<string> questions;
     vector<vector<string>> wrongAnswers;
@@ -98,6 +99,7 @@ void GetSubjects() {
 
 int main()
 {
+    string uniqueToken = "";
     GetSubjects();
     PvPRound();
 
