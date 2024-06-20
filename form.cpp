@@ -61,7 +61,7 @@ std::string jsonData(std::string url) {
         return "";
 }
 
-void PvPRound(std::string difficultyLevel = "", std::string subject = "Any Category") {
+void PvPRound(std::string difficultyLevel = "Any Difficulty", std::string subject = "Any Category") {
     std::string uniqueToken = "";
 
     std::string url("https://opentdb.com/api.php?amount=5&type=multiple");
@@ -74,7 +74,7 @@ void PvPRound(std::string difficultyLevel = "", std::string subject = "Any Categ
         }
         url += "&category=" + subjectId;
     } 
-    if (difficultyLevel != "")
+    if (difficultyLevel != "Any Difficulty")
         url += "&difficulty=" + difficultyLevel;
 
     std::string thisRoundItems = jsonData(url);
@@ -149,9 +149,9 @@ void Form::on_pushButton_clicked()
     ui->radioButton_8->setCheckable(true);
 
     if(ui->radioButton_1->isChecked()==true){difficaulty="Any Difficulty";}
-    else if(ui->radioButton_2->isChecked()==true){difficaulty="Easy";}
-    else if(ui->radioButton_3->isChecked()==true){difficaulty="Medium";}
-    else if(ui->radioButton_4->isChecked()==true){difficaulty="Hard";}
+    else if(ui->radioButton_2->isChecked()==true){difficaulty="easy";}
+    else if(ui->radioButton_3->isChecked()==true){difficaulty="medium";}
+    else if(ui->radioButton_4->isChecked()==true){difficaulty="hard";}
     ui->label_8->setText(QString::number(player1_score));
     ui->label_9->setText(QString::number(player2_score));
     ui->label_14->setText(QString::number(int(turn/2)+1 + golden_round_number));
@@ -177,6 +177,7 @@ void Form::on_pushButton_clicked()
 
     ui->label_3->setText(questions[0]);
     int randomCorrect = rand() % (4);
+    
     switch (randomCorrect)
     {
     case 0:
@@ -206,7 +207,6 @@ void Form::on_pushButton_clicked()
     default:
         break;
     }
-
 }
 
 
