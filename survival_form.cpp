@@ -206,9 +206,9 @@ void Survival_Form::on_pushButton_clicked()
 void Survival_Form::on_pushButton_2_clicked()
 {
     if (randomCorrect==0 && ui->radioButton_5->isChecked() == true) { score += 1; }
-    else if (randomCorrect == 0 && ui->radioButton_6->isChecked() == true) { score += 1; }
-    else if (randomCorrect == 0 && ui->radioButton_7->isChecked() == true) { score += 1; }
-    else if (randomCorrect == 0 && ui->radioButton_8->isChecked() == true) { score += 1; }
+    else if (randomCorrect == 1 && ui->radioButton_6->isChecked() == true) { score += 1; }
+    else if (randomCorrect == 2 && ui->radioButton_7->isChecked() == true) { score += 1; }
+    else if (randomCorrect == 3 && ui->radioButton_8->isChecked() == true) { score += 1; }
 
     if (high_score < score) { high_score = score; }
     ui->label_HSc->setText(QString::number(high_score));
