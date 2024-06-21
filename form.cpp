@@ -66,6 +66,16 @@ std::string jsonData(std::string url) {
         return "";
 }
 
+void Replacement(std::string& inp) {
+    int pos;
+    while ((pos = inp.find("&quot;")) != std::string::npos)
+        inp.replace(pos, 6, "\"");
+    while ((pos = inp.find("&amp;")) != std::string::npos)
+        inp.replace(pos, 5, "&");
+    while ((pos = inp.find("&#039;")) != std::string::npos)
+        inp.replace(pos, 6, "\'");
+}
+
 void PvPRound(std::string difficultyLevel = "Any Difficulty", std::string subject = "Any Category") {
     questions.clear();
     trueAnswer.clear();
@@ -98,18 +108,19 @@ resetToken:
             json res = js["results"];
 
             for (int i = 0; i < 5; i++) {
-                json qus = res[i];
-                json coans = res[i]["correct_answer"];
-                json qus2 = qus["question"];
-                std::string temp1 = qus2;
-                std::string temp2 = coans;
-                questions.push_back(QString::fromStdString(temp1));
-                trueAnswer.push_back(QString::fromStdString(temp2));
+                std::string q = res[i]["question"];
+                std::string ta = res[i]["correct_answer"];
+                Replacement(q);
+                Replacement(ta);
+
+                questions.push_back(QString::fromStdString(q));
+                trueAnswer.push_back(QString::fromStdString(ta));
 
                 std::vector<QString> wa;
                 json wajson = res[i]["incorrect_answers"];
                 for (short j = 0; j < 3; j++) {
                     std::string temp = wajson[j];
+                    Replacement(temp);
                     wa.push_back(QString::fromStdString(temp));
                 }
                 wrongAnswers.push_back(wa);
