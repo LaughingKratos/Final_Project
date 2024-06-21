@@ -119,7 +119,9 @@ public:
         QFont font2;
         font2.setPointSize(11);
         label_3->setFont(font2);
+        label_3->setScaledContents(false);
         label_3->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop);
+        label_3->setWordWrap(true);
         pushButton_2 = new QPushButton(frame_2);
         pushButton_2->setObjectName(QString::fromUtf8("pushButton_2"));
         pushButton_2->setGeometry(QRect(600, 200, 81, 31));
