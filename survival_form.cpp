@@ -7,6 +7,7 @@
 #include "QCloseEvent"
 #include <curl/curl.h>
 #include <nlohmann/json.hpp>
+#include "QTimer"
 
 QString difficaultyy;
 int question_nomber = 0;
@@ -80,6 +81,8 @@ Survival_Form::Survival_Form(QWidget *parent) :
     high_score = 0;
     score = 0;
     GetToken2();
+    timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &Survival_Form::on_pushButton_2_clicked);
 }
 
 Survival_Form::~Survival_Form()
@@ -212,11 +215,14 @@ void Survival_Form::on_pushButton_clicked()
     default:
         break;
     }
+    timer->start(15000);
 }
 
 
 void Survival_Form::on_pushButton_2_clicked()
 {
+    timer->stop();
+    
     if (randomCorrect==0 && ui->radioButton_5->isChecked() == true) { score += 1; }
     else if (randomCorrect == 1 && ui->radioButton_6->isChecked() == true) { score += 1; }
     else if (randomCorrect == 2 && ui->radioButton_7->isChecked() == true) { score += 1; }
@@ -228,6 +234,7 @@ void Survival_Form::on_pushButton_2_clicked()
     ui->label_wrongs->setText(QString::number((question_nomber + 1) - score));
 
     if (question_nomber - score == 2) {
+        timer->stop();
         ui->frame_2->setEnabled(false);
         QMessageBox* msg = new QMessageBox;
         msg->setText("Your final score in " + difficaultyy + " Mode is " + QString::number(score));
@@ -316,7 +323,7 @@ void Survival_Form::on_pushButton_2_clicked()
     }
 
     ui->radioButton_9->setChecked(true);
-
+    timer->start(15000);
     question_nomber += 1;
 }
 
