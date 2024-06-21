@@ -14,25 +14,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     setWindowTitle("The Game");
-
-    int any_score = 0;
-    int easy_score = 0;
-    int medium_score = 0;
-    int hard_score = 0;
-
-    QFile file("scores.txt");
-    if (file.exists()){
-        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            QTextStream out(&file);
-            out << any_score << '\n' << easy_score << '\n' << medium_score << '\n' << hard_score;
-            file.close();
-        }
-        else{
-            QMessageBox *ermsg = new QMessageBox;
-            ermsg->setText("Error creating the file!");
-            ermsg->exec();
-        }
-    }
 }
 
 MainWindow::~MainWindow()
