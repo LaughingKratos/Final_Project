@@ -22,6 +22,7 @@ private slots:
 
 private:
     Ui::Form *ui;
+    QTimer *timer;
 };
 
 #endif // FORM_H
