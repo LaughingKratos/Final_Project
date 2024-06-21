@@ -54,6 +54,16 @@ std::string jsonData2(std::string url) {
         return "";
 }
 
+void Replacement2(std::string& inp) {
+    int pos;
+    while ((pos = inp.find("&quot;")) != std::string::npos)
+        inp.replace(pos, 6, "\"");
+    while ((pos = inp.find("&amp;")) != std::string::npos)
+        inp.replace(pos, 5, "&");
+    while ((pos = inp.find("&#039;")) != std::string::npos)
+        inp.replace(pos, 6, "\'");
+}
+
 void GetToken2() {
     json tokenJ = json::parse(jsonData2("https://opentdb.com/api_token.php?command=request"));
     if (tokenJ["response_code"] == 0)
@@ -104,15 +114,17 @@ void GetQuestion() {
 
         if (js["response_code"] == 0) {
             json res = js["results"];
-            json qus = res[0]["question"];
-            json coans = res[0]["correct_answer"];
-            std::string temp1 = qus;
-            std::string temp2 = coans;
-            question = QString::fromStdString(temp1);
-            trueAnswer = QString::fromStdString(temp2);
+            std::string qs = res[0]["question"];
+            std::string coans = res[0]["correct_answer"];
+            Replacement2(qs);
+            Replacement2(coans);
+
+            question = QString::fromStdString(qs);
+            trueAnswer = QString::fromStdString(coans);
             json wajson = res[0]["incorrect_answers"];
             for (short j = 0; j < 3; j++) {
                 std::string temp = wajson[j];
+                Replacement2(temp);
                 wrongAnswers.push_back(QString::fromStdString(temp));     
             }
         }
