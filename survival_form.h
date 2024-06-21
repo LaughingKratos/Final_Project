@@ -22,6 +22,7 @@ private slots:
 
 private:
     Ui::Survival_Form *ui;
+    QTimer *timer;
 };
 
 #endif // SURVIVAL_FORM_H
