@@ -176,8 +176,8 @@ void Survival_Form::on_pushButton_clicked()
     case 0:
         ui->radioButton_5->setText(trueAnswer);
         ui->radioButton_6->setText(wrongAnswers[0]);
-        ui->radioButton_7->setText(wrongAnswers[0]);
-        ui->radioButton_8->setText(wrongAnswers[0]);
+        ui->radioButton_7->setText(wrongAnswers[1]);
+        ui->radioButton_8->setText(wrongAnswers[2]);
         break;
     case 1:
         ui->radioButton_6->setText(trueAnswer);
@@ -278,8 +278,8 @@ void Survival_Form::on_pushButton_2_clicked()
     case 0:
         ui->radioButton_5->setText(trueAnswer);
         ui->radioButton_6->setText(wrongAnswers[0]);
-        ui->radioButton_7->setText(wrongAnswers[0]);
-        ui->radioButton_8->setText(wrongAnswers[0]);
+        ui->radioButton_7->setText(wrongAnswers[1]);
+        ui->radioButton_8->setText(wrongAnswers[2]);
         break;
     case 1:
         ui->radioButton_6->setText(trueAnswer);
