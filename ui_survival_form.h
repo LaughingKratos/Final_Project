@@ -45,6 +45,7 @@ public:
     QRadioButton *radioButton_1;
     QPushButton *pushButton;
     QLabel *label_5;
+    QLabel *label;
 
     void setupUi(QWidget *Survival_Form)
     {
@@ -165,6 +166,13 @@ public:
         label_5->setGeometry(QRect(420, 10, 161, 41));
         label_5->setFont(font1);
         label_5->setAlignment(Qt::AlignCenter);
+        label = new QLabel(Survival_Form);
+        label->setObjectName(QString::fromUtf8("label"));
+        label->setGeometry(QRect(550, 70, 31, 31));
+        QFont font3;
+        font3.setFamily(QString::fromUtf8("Arial"));
+        font3.setPointSize(15);
+        label->setFont(font3);
 
         retranslateUi(Survival_Form);
 
@@ -194,6 +202,7 @@ public:
         radioButton_1->setText(QCoreApplication::translate("Survival_Form", "Any Difficulty", nullptr));
         pushButton->setText(QCoreApplication::translate("Survival_Form", "Start Round", nullptr));
         label_5->setText(QString());
+        label->setText(QCoreApplication::translate("Survival_Form", "15", nullptr));
     } // retranslateUi
 
 };

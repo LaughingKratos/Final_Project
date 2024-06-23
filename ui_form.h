@@ -53,6 +53,7 @@ public:
     QLabel *label_11;
     QFrame *frame_5;
     QLabel *label_5;
+    QLabel *label_12;
 
     void setupUi(QWidget *Form)
     {
@@ -94,6 +95,7 @@ public:
         radioButton_8->setObjectName(QString::fromUtf8("radioButton_8"));
         radioButton_8->setGeometry(QRect(370, 160, 331, 17));
         QFont font;
+        font.setFamily(QString::fromUtf8("Arial"));
         font.setPointSize(10);
         radioButton_8->setFont(font);
         radioButton_8->setAutoRepeatDelay(300);
@@ -116,7 +118,8 @@ public:
         label_3->setObjectName(QString::fromUtf8("label_3"));
         label_3->setGeometry(QRect(20, 20, 651, 71));
         QFont font1;
-        font1.setPointSize(11);
+        font1.setFamily(QString::fromUtf8("Arial"));
+        font1.setPointSize(12);
         label_3->setFont(font1);
         label_3->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop);
         label_3->setWordWrap(true);
@@ -126,7 +129,9 @@ public:
         radioButton_9 = new QRadioButton(frame_2);
         radioButton_9->setObjectName(QString::fromUtf8("radioButton_9"));
         radioButton_9->setGeometry(QRect(370, 160, 331, 17));
-        radioButton_9->setFont(font);
+        QFont font2;
+        font2.setPointSize(10);
+        radioButton_9->setFont(font2);
         radioButton_9->raise();
         radioButton_8->raise();
         radioButton_7->raise();
@@ -144,9 +149,9 @@ public:
         comboBox->addItem(QString());
         comboBox->setObjectName(QString::fromUtf8("comboBox"));
         comboBox->setGeometry(QRect(70, 10, 291, 21));
-        QFont font2;
-        font2.setPointSize(9);
-        comboBox->setFont(font2);
+        QFont font3;
+        font3.setPointSize(9);
+        comboBox->setFont(font3);
         comboBox->setContextMenuPolicy(Qt::DefaultContextMenu);
         label = new QLabel(frame_3);
         label->setObjectName(QString::fromUtf8("label"));
@@ -154,9 +159,10 @@ public:
         label_4 = new QLabel(Form);
         label_4->setObjectName(QString::fromUtf8("label_4"));
         label_4->setGeometry(QRect(450, 40, 81, 31));
-        QFont font3;
-        font3.setPointSize(13);
-        label_4->setFont(font3);
+        QFont font4;
+        font4.setPointSize(13);
+        label_4->setFont(font4);
+        label_4->setStyleSheet(QString::fromUtf8("color:Blue"));
         label_4->setAlignment(Qt::AlignCenter);
         frame_4 = new QFrame(Form);
         frame_4->setObjectName(QString::fromUtf8("frame_4"));
@@ -166,38 +172,38 @@ public:
         label_7 = new QLabel(frame_4);
         label_7->setObjectName(QString::fromUtf8("label_7"));
         label_7->setGeometry(QRect(10, 30, 71, 21));
-        QFont font4;
-        font4.setPointSize(8);
-        label_7->setFont(font4);
+        QFont font5;
+        font5.setPointSize(8);
+        label_7->setFont(font5);
         label_8 = new QLabel(frame_4);
         label_8->setObjectName(QString::fromUtf8("label_8"));
         label_8->setGeometry(QRect(90, 10, 21, 21));
-        label_8->setFont(font4);
+        label_8->setFont(font5);
         label_6 = new QLabel(frame_4);
         label_6->setObjectName(QString::fromUtf8("label_6"));
         label_6->setGeometry(QRect(10, 10, 71, 21));
-        label_6->setFont(font4);
+        label_6->setFont(font5);
         label_9 = new QLabel(frame_4);
         label_9->setObjectName(QString::fromUtf8("label_9"));
         label_9->setGeometry(QRect(90, 30, 21, 21));
-        label_9->setFont(font4);
+        label_9->setFont(font5);
         label_14 = new QLabel(frame_4);
         label_14->setObjectName(QString::fromUtf8("label_14"));
         label_14->setGeometry(QRect(90, 50, 21, 21));
-        label_14->setFont(font4);
+        label_14->setFont(font5);
         label_15 = new QLabel(frame_4);
         label_15->setObjectName(QString::fromUtf8("label_15"));
         label_15->setGeometry(QRect(10, 50, 71, 21));
-        label_15->setFont(font4);
+        label_15->setFont(font5);
         label_15->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         label_10 = new QLabel(frame_4);
         label_10->setObjectName(QString::fromUtf8("label_10"));
         label_10->setGeometry(QRect(100, 10, 21, 21));
-        label_10->setFont(font4);
+        label_10->setFont(font5);
         label_11 = new QLabel(frame_4);
         label_11->setObjectName(QString::fromUtf8("label_11"));
         label_11->setGeometry(QRect(100, 30, 21, 21));
-        label_11->setFont(font4);
+        label_11->setFont(font5);
         frame_5 = new QFrame(Form);
         frame_5->setObjectName(QString::fromUtf8("frame_5"));
         frame_5->setEnabled(true);
@@ -207,8 +213,15 @@ public:
         label_5 = new QLabel(Form);
         label_5->setObjectName(QString::fromUtf8("label_5"));
         label_5->setGeometry(QRect(780, 40, 20, 20));
-        label_5->setFont(font);
+        label_5->setFont(font2);
         label_5->setAlignment(Qt::AlignCenter);
+        label_12 = new QLabel(Form);
+        label_12->setObjectName(QString::fromUtf8("label_12"));
+        label_12->setGeometry(QRect(560, 60, 31, 31));
+        QFont font6;
+        font6.setPointSize(15);
+        label_12->setFont(font6);
+        label_12->setStyleSheet(QString::fromUtf8("color:black"));
         frame_5->raise();
         pushButton->raise();
         frame->raise();
@@ -217,6 +230,7 @@ public:
         label_4->raise();
         frame_4->raise();
         label_5->raise();
+        label_12->raise();
 
         retranslateUi(Form);
 
@@ -252,6 +266,7 @@ public:
         label_10->setText(QCoreApplication::translate("Form", "0", nullptr));
         label_11->setText(QCoreApplication::translate("Form", "0", nullptr));
         label_5->setText(QString());
+        label_12->setText(QCoreApplication::translate("Form", "30", nullptr));
     } // retranslateUi
 
 };
