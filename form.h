@@ -20,9 +20,12 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    void UpdateCountdown();
+
 private:
     Ui::Form *ui;
     QTimer *timer;
+    QTimer* timerSec;
 };
 
 #endif // FORM_H

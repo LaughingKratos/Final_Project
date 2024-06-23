@@ -142,6 +142,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Arial</family>
       <pointsize>10</pointsize>
      </font>
     </property>
@@ -163,6 +164,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Arial</family>
       <pointsize>10</pointsize>
      </font>
     </property>
@@ -184,6 +186,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Arial</family>
       <pointsize>10</pointsize>
      </font>
     </property>
@@ -205,6 +208,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Arial</family>
       <pointsize>10</pointsize>
      </font>
     </property>
@@ -226,7 +230,8 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>11</pointsize>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
      </font>
     </property>
     <property name="text">
@@ -346,6 +351,9 @@
     <font>
      <pointsize>13</pointsize>
     </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color:Blue</string>
    </property>
    <property name="text">
     <string>Player 1</string>
@@ -557,6 +565,27 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
+  <widget class="QLabel" name="label_12">
+   <property name="geometry">
+    <rect>
+     <x>560</x>
+     <y>60</y>
+     <width>31</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>15</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color:black</string>
+   </property>
+   <property name="text">
+    <string>30</string>
+   </property>
+  </widget>
   <zorder>frame_5</zorder>
   <zorder>pushButton</zorder>
   <zorder>frame</zorder>
@@ -565,6 +594,7 @@
   <zorder>label_4</zorder>
   <zorder>frame_4</zorder>
   <zorder>label_5</zorder>
+  <zorder>label_12</zorder>
  </widget>
  <resources/>
  <connections/>

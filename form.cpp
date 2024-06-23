@@ -6,6 +6,7 @@
 #include <curl/curl.h>
 #include <nlohmann/json.hpp>
 #include <ctime>
+#include "QTimer"
 
 QString category;
 QString difficaulty;
@@ -191,6 +192,9 @@ Form::Form(QWidget *parent) :
         QString thisItem = QString::fromStdString(Subjects[i]);
         ui->comboBox->addItem(thisItem);
     }
+    timer = new QTimer(this);
+    ui->label_4->setStyleSheet("color:Blue");
+    timerSec = new QTimer(this);
 }
 
 Form::~Form()
@@ -200,6 +204,8 @@ Form::~Form()
 
 void Form::on_pushButton_clicked()
 {
+    connect(timerSec, SIGNAL(timeout()), this, SLOT(UpdateCountdown()));
+
     if (Subjects.size() == 0) {
         QMessageBox* msg = new QMessageBox;
         msg->setWindowTitle("Error!");
@@ -279,6 +285,10 @@ void Form::on_pushButton_clicked()
     default:
         break;
     }
+
+    connect(timer, &QTimer::timeout, this, &Form::on_pushButton_2_clicked);
+    timer->start(30000);
+    timerSec->start(1000);
 }
 
 
@@ -299,6 +309,8 @@ void Form::on_pushButton_2_clicked()
     }
     */
 
+    timer->stop();
+    timerSec->stop();
     question_number++;
 
     if (question_number >= 0 && question_number <= 5) {
@@ -483,6 +495,11 @@ void Form::on_pushButton_2_clicked()
         }
         player1_score = 0;
         player2_score = 0;
+        timer->stop();
+        timer->disconnect();
+        timerSec->stop();
+        timerSec->disconnect();
+        ui->label_12->setText("30");
 
         turn += 1;
     }
@@ -503,6 +520,11 @@ void Form::on_pushButton_2_clicked()
         }
         player1_score = 0;
         player2_score = 0;
+        timer->stop();
+        timer->disconnect();
+        timerSec->stop();
+        timerSec->disconnect();
+        ui->label_12->setText("30");
 
         if (question_number == 5 && turn % 2 == 1 && turn == 7 && player1_tScore == player2_tScore) {
         ui->label_3->setText("Question");
@@ -574,6 +596,21 @@ void Form::on_pushButton_2_clicked()
     ui->label_9->setText(QString::number(player2_score));
     ui->label_14->setText(QString::number(int(turn / 2) + 1 + golden_round_number));
 
+    if (turn % 2 == 1)
+        ui->label_4->setStyleSheet("color:Green");
+    else
+        ui->label_4->setStyleSheet("color:Blue");
+
+    timer->start(30000);
+    if(question_number != 5)
+        timerSec->start(1000);
+    ui->label_12->setText("30");
+}
+
+void Form::UpdateCountdown() {
+    timerSec->start(1000);
+    int rt = timer->remainingTime() / 1000.0;
+    ui->label_12->setText(QString::fromStdString(std::to_string(rt)));
 }
 
 /*
