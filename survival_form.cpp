@@ -327,13 +327,20 @@ void Survival_Form::on_pushButton_2_clicked()
     ui->radioButton_9->setChecked(true);
     timer->start(15000);
     ui->label->setText("15");
+    ui->label->setStyleSheet("color:black");
     timerSec->start(1000);
     question_nomber += 1;
 }
 
 void Survival_Form::UpdateCountdown() {
     timerSec->start(1000);
-    ui->label->setText(QString::fromStdString(std::to_string(timer->remainingTime()/1000)));
+    double rtd = (timer->remainingTime() / 1000.0);
+    int rt = round(rtd);
+    if(rtd)
+    if (rt == 5) {
+        ui->label->setStyleSheet("color:red");
+    }
+    ui->label->setText(QString::fromStdString(std::to_string(rt)));
 }
 
 /*

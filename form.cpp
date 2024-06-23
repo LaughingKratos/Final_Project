@@ -500,6 +500,7 @@ void Form::on_pushButton_2_clicked()
         timerSec->stop();
         timerSec->disconnect();
         ui->label_12->setText("30");
+        ui->label_12->setStyleSheet("color:black");
 
         turn += 1;
     }
@@ -525,6 +526,7 @@ void Form::on_pushButton_2_clicked()
         timerSec->stop();
         timerSec->disconnect();
         ui->label_12->setText("30");
+        ui->label_12->setStyleSheet("color:black");
 
         if (question_number == 5 && turn % 2 == 1 && turn == 7 && player1_tScore == player2_tScore) {
         ui->label_3->setText("Question");
@@ -605,11 +607,16 @@ void Form::on_pushButton_2_clicked()
     if(question_number != 5)
         timerSec->start(1000);
     ui->label_12->setText("30");
+    ui->label_12->setStyleSheet("color:black");
 }
 
 void Form::UpdateCountdown() {
     timerSec->start(1000);
-    int rt = timer->remainingTime() / 1000.0;
+    double rtd = timer->remainingTime() / 1000.0;
+    int rt = round(rtd);
+    if (rt == 5) {
+        ui->label_12->setStyleSheet("color:red");
+    }
     ui->label_12->setText(QString::fromStdString(std::to_string(rt)));
 }
 

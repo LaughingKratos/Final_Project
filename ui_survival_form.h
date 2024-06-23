@@ -173,6 +173,7 @@ public:
         font3.setFamily(QString::fromUtf8("Arial"));
         font3.setPointSize(15);
         label->setFont(font3);
+        label->setStyleSheet(QString::fromUtf8("color:black"));
 
         retranslateUi(Survival_Form);
 

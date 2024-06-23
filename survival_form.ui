@@ -447,6 +447,9 @@
      <pointsize>15</pointsize>
     </font>
    </property>
+   <property name="styleSheet">
+    <string notr="true">color:black</string>
+   </property>
    <property name="text">
     <string>15</string>
    </property>
