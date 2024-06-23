@@ -20,9 +20,12 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    void UpdateCountdown();
+
 private:
     Ui::Survival_Form *ui;
     QTimer *timer;
+    QTimer* timerSec;
 };
 
 #endif // SURVIVAL_FORM_H

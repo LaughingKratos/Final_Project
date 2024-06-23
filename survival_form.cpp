@@ -82,16 +82,12 @@ Survival_Form::Survival_Form(QWidget *parent) :
     score = 0;
     GetToken2();
     timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &Survival_Form::on_pushButton_2_clicked);
+    timerSec = new QTimer(this);
+    connect(timerSec, SIGNAL(timeout()), this, SLOT(UpdateCountdown()));
 }
 
 Survival_Form::~Survival_Form()
 {
-    /*
-    QMessageBox *tip = new QMessageBox;
-    tip->setText("mooooooooooooooooooooooooooooooooooooooooooooooooooooooooooorgh!");
-    tip->exec();
-    */
     delete ui;
 }
 
@@ -215,13 +211,17 @@ void Survival_Form::on_pushButton_clicked()
     default:
         break;
     }
+
+    connect(timer, &QTimer::timeout, this, &Survival_Form::on_pushButton_2_clicked);
     timer->start(15000);
+    timerSec->start(1000);
 }
 
 
 void Survival_Form::on_pushButton_2_clicked()
 {
     timer->stop();
+    timerSec->stop();
     
     if (randomCorrect==0 && ui->radioButton_5->isChecked() == true) { score += 1; }
     else if (randomCorrect == 1 && ui->radioButton_6->isChecked() == true) { score += 1; }
@@ -235,6 +235,8 @@ void Survival_Form::on_pushButton_2_clicked()
 
     if (question_nomber - score == 2) {
         timer->stop();
+        timer->disconnect();
+        timerSec->stop();
         ui->frame_2->setEnabled(false);
         QMessageBox* msg = new QMessageBox;
         msg->setText("Your final score in " + difficaultyy + " Mode is " + QString::number(score));
@@ -324,7 +326,14 @@ void Survival_Form::on_pushButton_2_clicked()
 
     ui->radioButton_9->setChecked(true);
     timer->start(15000);
+    ui->label->setText("15");
+    timerSec->start(1000);
     question_nomber += 1;
+}
+
+void Survival_Form::UpdateCountdown() {
+    timerSec->start(1000);
+    ui->label->setText(QString::fromStdString(std::to_string(timer->remainingTime()/1000)));
 }
 
 /*
